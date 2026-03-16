@@ -8,48 +8,146 @@ Build a fully functional website with **10 engaging, age-appropriate games** for
 
 ## Agent Development Pipeline
 
-This project is built by three autonomous AI agents running on a scheduler:
+This project is built by **4 autonomous AI agents** running sequentially on a scheduler. Agents communicate exclusively through **GitHub Issues** with a label-based state machine.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Scheduler Daemon                         │
-│                                                             │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
-│  │  PM Agent     │  │  Dev Agent   │  │  Reviewer Agent  │  │
-│  │  Every 1 hr   │  │  Every 2 hrs │  │  Every 4 hrs     │  │
-│  │               │  │              │  │                   │  │
-│  │ • Write reqs  │  │ • Read reqs  │  │ • Code review     │  │
-│  │ • Cut issues  │  │ • Implement  │  │ • Run tests       │  │
-│  │ • Prioritize  │  │ • Push code  │  │ • Fix bugs        │  │
-│  │ • Track prog. │  │ • Close issu.│  │ • Report issues   │  │
-│  └──────────────┘  └──────────────┘  └──────────────────┘  │
-│                         │                                    │
-│                         ▼                                    │
-│              GitHub: FunWebGames repo                        │
-│              (commits, issues, PRs)                           │
-└─────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                        Scheduler Daemon                              │
+│                                                                      │
+│  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐  ┌───────────┐ │
+│  │  PM Agent    │  │  Dev Agent  │  │  Reviewer    │  │  Tester   │ │
+│  │  Every 1 hr  │  │  Every 2 hr │  │  Every 4 hr  │  │ Every 6 hr│ │
+│  │              │  │             │  │              │  │           │ │
+│  │ • Write reqs │  │ • Implement │  │ • Code review│  │ • Test in │ │
+│  │ • Cut issues │  │ • Push code │  │ • Fix issues │  │   browser │ │
+│  │ • Prioritize │  │ • Update    │  │ • Comment on │  │ • Close   │ │
+│  │ • Track prog │  │   labels    │  │   issues     │  │   or fail │ │
+│  └──────┬───────┘  └──────┬──────┘  └──────┬───────┘  └─────┬─────┘ │
+│         │                 │                │                │        │
+│         ▼                 ▼                ▼                ▼        │
+│  ┌──────────────────────────────────────────────────────────────┐    │
+│  │              GitHub Issues (Single Source of Truth)           │    │
+│  │                                                              │    │
+│  │  Issue lifecycle:                                            │    │
+│  │  PM creates ──► Dev implements ──► Reviewer reviews ──►     │    │
+│  │  Tester tests ──► Closed (or back to Dev)                   │    │
+│  │                                                              │    │
+│  │  Labels control flow. Assignee = lock.                      │    │
+│  └──────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
-### PM Agent (runs every 1 hour)
-- Reviews current project state and progress
-- Writes and updates requirements incrementally in `docs/requirements/`
-- Creates GitHub issues for new features, improvements, and tasks
-- Prioritizes the backlog based on what's been completed
-- Tracks overall progress toward the 10-game goal
+### How Agents Communicate
 
-### Developer Agent (runs every 2 hours)
-- Reads the latest requirements and open issues
-- Implements games and features incrementally
-- Writes clean, well-structured code
-- Pushes commits with descriptive summaries
-- Closes issues upon completion
+Agents do **not** talk to each other directly. All coordination happens through GitHub Issues using **labels** and **assignees** as a state machine.
 
-### Code Reviewer / Tester Agent (runs every 4 hours)
-- Reviews recent code changes for quality and correctness
-- Tests each game manually (loads in browser, verifies functionality)
-- Files bug reports as GitHub issues
-- Fixes critical bugs directly
-- Verifies games match the requirements
+#### Issue Lifecycle (State Machine)
+
+```
+                    ┌─────────────────────────────────────────────┐
+                    │                                             │
+                    ▼                                             │
+PM creates ──► [ready-for-dev] ──► Dev picks up ──►              │
+               (unassigned)        [in-progress]                 │
+                                   (assigned: dev)               │
+                                        │                        │
+                                        ▼                        │
+                                  [ready-for-review] ──►         │
+                                  (unassigned)                   │
+                                        │                        │
+                                        ▼                        │
+                                  Reviewer picks up ──►          │
+                                  [in-progress]                  │
+                                  (assigned: reviewer)           │
+                                        │                        │
+                                  ┌─────┴──────┐                 │
+                                  ▼            ▼                 │
+                            Review PASS   Review FAIL            │
+                                  │            │                 │
+                                  ▼            └─────────────────┘
+                            [ready-for-test]     (back to ready-for-dev
+                            (unassigned)          with comment)
+                                  │
+                                  ▼
+                            Tester picks up ──►
+                            [in-progress]
+                            (assigned: tester)
+                                  │
+                            ┌─────┴──────┐
+                            ▼            ▼
+                       Test PASS    Test FAIL
+                            │            │
+                            ▼            └───────────────────────┘
+                       [done]              (back to ready-for-dev
+                       (closed)             with comment)
+```
+
+#### Labels (Mutually Exclusive)
+
+Each issue has **exactly one** status label at any time. When transitioning, the agent **removes the old label before adding the new one** — it is a replacement, not an addition.
+
+| Label | Meaning | Who acts on it |
+|-------|---------|---------------|
+| `ready-for-dev` | Spec is complete, ready to implement | Dev Agent picks up |
+| `in-progress` | An agent is actively working on this | No one else touches it |
+| `ready-for-review` | Code is written, needs review | Reviewer Agent picks up |
+| `ready-for-test` | Review passed, needs testing | Tester Agent picks up |
+| `done` | Tested and closed | No one (terminal state) |
+
+**Category labels** (not mutually exclusive, used for filtering):
+`feature`, `bug`, `game`, `docs`, `priority-high`
+
+#### Assignee = Lock
+
+Labels alone can't prevent two agents from grabbing the same issue. The **assignee field** acts as a lock:
+
+1. Agent queries issues with the right label AND **unassigned**
+2. **First action**: assign self + change label to `in-progress`
+3. If an issue is `in-progress` and assigned to someone else → **skip it**
+4. When done: unassign self + set the next label
+
+**Stale detection**: If an issue is `in-progress` for >2 hours with no new comment, the next agent that sees it may unassign and reset the label to the previous state.
+
+### Agent Roles
+
+#### 1. PM Agent (runs every 1 hour)
+- Reads `docs/REQUIREMENTS.md` and checks existing GitHub issues
+- Assesses which games are complete, in progress, or not started
+- Writes per-game requirement files in `docs/requirements/<game-name>.md`
+- Creates issues with label `ready-for-dev` (max **5 open issues** at a time)
+- Before creating: checks for duplicates and existing open issues
+- Updates `docs/PROGRESS.md` with current status
+- Commits and pushes doc changes
+
+**Termination rule**: When the PM believes all requirements from `REQUIREMENTS.md` are covered by existing issues (open or closed), it creates a milestone issue titled **"All requirements complete"** with label `milestone` and **stops creating new issues**. If a Tester or Reviewer later creates a `feature-request` issue, the PM picks it up on the next run.
+
+#### 2. Developer Agent (runs every 2 hours)
+- Queries issues labeled `ready-for-dev` + unassigned
+- Picks the highest-priority issue (prefer `priority-high`, then oldest)
+- Assigns self + labels `in-progress`
+- Reads the requirement file in `docs/requirements/`
+- Implements incrementally — one game or one major feature per run
+- Commits with format: `feat(game-name): description` or `fix(game-name): description`
+- Pushes to `main` branch
+- Comments on the issue with what was done + commit SHA
+- Removes `in-progress`, adds `ready-for-review`, unassigns self
+
+#### 3. Code Reviewer Agent (runs every 4 hours)
+- Queries issues labeled `ready-for-review` + unassigned
+- Assigns self + labels `in-progress`
+- Reviews the code changes (referenced in issue comments)
+- Checks: HTML validity, game mechanics match requirements, visual style matches GR-2, no console errors, touch targets ≥ 48px
+- **If review passes**: removes `in-progress`, adds `ready-for-test`, unassigns self, comments "Review passed"
+- **If review fails**: fixes critical bugs directly (commits + pushes), or comments with detailed feedback, removes `in-progress`, adds `ready-for-dev`, unassigns self
+
+#### 4. Tester Agent (runs every 6 hours)
+- Queries issues labeled `ready-for-test` + unassigned
+- Assigns self + labels `in-progress`
+- Serves the site (`python3 -m http.server`), opens in browser
+- Tests against `tests/checklist.md` criteria for the relevant game
+- Verifies: gameplay works, sounds play, responsive layout, no console errors
+- **If test passes**: removes `in-progress`, adds `done`, unassigns self, closes the issue with a test summary comment
+- **If test fails**: comments with specific failures + screenshots, removes `in-progress`, adds `ready-for-dev`, unassigns self (issue goes back to Dev)
 
 ## Tech Stack
 

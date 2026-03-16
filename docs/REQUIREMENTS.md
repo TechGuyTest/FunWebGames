@@ -231,41 +231,216 @@ Build 10 browser-based games for 6-year-old children. All games run as static HT
 
 ## Agent Workflow Requirements
 
-These requirements govern how the three AI agents collaborate:
+These requirements govern how the **4 AI agents** collaborate. Agents communicate exclusively through **GitHub Issues** using a label-based state machine. They never communicate directly.
 
-### AWR-1: PM Agent Behavior
-- On each run, read `docs/REQUIREMENTS.md` and check GitHub issues
-- Assess which games are complete, in progress, or not started
-- Write per-game requirement files in `docs/requirements/<game-name>.md` with detailed specs
-- Create GitHub issues for the next highest-priority work (label: `feature`, `game`, or `bug`)
-- Update a progress tracker in `docs/PROGRESS.md`
-- Commit and push all doc changes
+---
 
-### AWR-2: Developer Agent Behavior
-- On each run, read open issues (sorted by priority), pick the top one
-- Read the relevant requirement file in `docs/requirements/`
-- Implement incrementally — one game or one major feature per run
-- Write clean, working code — test by examining the output
-- Commit with descriptive messages: `feat(game-name): description` or `fix(game-name): description`
-- Close the issue in the commit message or via comment
-- Push to main branch
+### AWR-1: Issue State Machine
 
-### AWR-3: Reviewer Agent Behavior
-- On each run, review all recent commits since last review
-- For each game folder with code, verify:
-  - HTML is valid and loads without errors
-  - Game mechanics work as described in requirements
-  - Visual design matches the global requirements (colors, touch targets, etc.)
-  - No console errors
-- File GitHub issues for bugs found (label: `bug`, include steps to reproduce)
-- Fix critical bugs directly (broken games, missing assets)
-- Update `tests/checklist.md` with test results
-- Commit and push fixes
+Every issue follows this lifecycle, controlled by **labels** and **assignees**:
 
-### AWR-4: Shared Conventions
-- All agents use the same repo: `FunWebGames`
-- Branch: `main` (no feature branches — agents work incrementally on main)
-- Commit format: `<type>(<scope>): <description>` where type is `feat`, `fix`, `docs`, `test`, `style`
-- Issues use labels: `feature`, `bug`, `docs`, `game`, `review`, `priority-high`
-- Agents should `git pull` before starting work to get latest changes
-- Agents should handle merge conflicts gracefully (pull, rebase, retry)
+```
+PM creates issue
+  → label: ready-for-dev, unassigned
+  → Dev picks up: label: in-progress, assigned: dev-agent
+  → Dev finishes: label: ready-for-review, unassigned
+  → Reviewer picks up: label: in-progress, assigned: reviewer-agent
+  → Review passes: label: ready-for-test, unassigned
+  → Review fails: label: ready-for-dev, unassigned (+ comment)
+  → Tester picks up: label: in-progress, assigned: tester-agent
+  → Test passes: label: done, closed
+  → Test fails: label: ready-for-dev, unassigned (+ comment)
+```
+
+**Label rules:**
+- Status labels are **mutually exclusive**: `ready-for-dev`, `in-progress`, `ready-for-review`, `ready-for-test`, `done`
+- When transitioning, the agent **removes the old label first, then adds the new one** — replace, never stack
+- Category labels (`feature`, `bug`, `game`, `docs`, `priority-high`) are additive and do not conflict with status labels
+
+**Assignee-as-lock rules:**
+- An agent only picks up issues with the correct status label AND **no assignee**
+- **First action** when picking up: assign self + change label to `in-progress`
+- If an issue is `in-progress` and assigned to another agent → **skip it**
+- When done: unassign self + set the next status label
+- **Stale detection**: if `in-progress` for >2 hours with no new comment, the next agent may unassign and reset the label to its previous state
+
+---
+
+### AWR-2: PM Agent Behavior (runs every 1 hour)
+
+**Purpose**: Break down requirements into implementable issues, one step at a time.
+
+**On each run:**
+1. `git pull` to get latest changes
+2. Read `docs/REQUIREMENTS.md` and scan existing GitHub issues (open + closed)
+3. Assess what is done, in progress, and not started
+4. Write or update per-game requirement files in `docs/requirements/<game-name>.md`
+5. Create new issues with label `ready-for-dev` if needed
+6. Update `docs/PROGRESS.md` with current status
+7. Commit and push doc changes
+
+**Constraints:**
+- **Max 5 open issues at a time** — count all open issues regardless of label
+- Before creating: check for duplicates by title and content
+- Prioritize: project scaffolding first, then one game at a time, then polish/cross-game features
+- Each issue should be implementable in a single Dev Agent run (~2 hours of work)
+- Include the relevant requirement file path and acceptance criteria in the issue body
+
+**Termination rule:**
+- When the PM believes all requirements from `REQUIREMENTS.md` are covered by issues (open or closed), it creates a milestone issue titled **"All requirements complete"** with label `milestone`
+- While this milestone issue is open, **the PM stops creating new issues**
+- If another agent creates a `feature-request` or `bug` issue, the PM picks it up on the next run and may create follow-up issues
+- **This is critical** — without termination, agents will work endlessly
+
+---
+
+### AWR-3: Developer Agent Behavior (runs every 2 hours)
+
+**Purpose**: Implement features and fix bugs based on issues.
+
+**On each run:**
+1. `git pull` to get latest changes
+2. Query issues: label `ready-for-dev` + unassigned
+3. Pick the highest-priority issue (`priority-high` first, then oldest)
+4. **Assign self** + replace label with `in-progress`
+5. Read the requirement file referenced in the issue
+6. Implement the feature or fix
+7. Commit with format: `feat(game-name): description` or `fix(game-name): description`
+8. Push to `main` branch
+9. Comment on the issue: summary of changes + commit SHA
+10. **Unassign self** + replace label with `ready-for-review`
+
+**Constraints:**
+- One issue per run — do not try to implement multiple issues
+- If no `ready-for-dev` issues exist, do nothing
+- Do not close issues — only the Tester Agent closes issues
+- Test your own code before marking ready for review (open the HTML, check for errors)
+
+---
+
+### AWR-4: Code Reviewer Agent Behavior (runs every 4 hours)
+
+**Purpose**: Review code quality and correctness before testing.
+
+**On each run:**
+1. `git pull` to get latest changes
+2. Query issues: label `ready-for-review` + unassigned
+3. Pick the oldest issue
+4. **Assign self** + replace label with `in-progress`
+5. Review the code changes (referenced commits in issue comments)
+
+**Review checklist:**
+- HTML is valid and loads without errors
+- Game mechanics match the requirement file
+- Visual style matches GR-2 (colors, fonts, rounded corners, shadows)
+- Touch targets ≥ 48px (GR-2)
+- No console errors or warnings (GR-5)
+- Responsive layout works at 320px, 768px, 1920px (GR-4)
+- Audio feedback present (GR-3)
+- Code is clean and readable (GR-6)
+
+**If review passes:**
+- Comment: "Review passed" with brief notes
+- **Unassign self** + replace label with `ready-for-test`
+
+**If review fails (minor issues):**
+- Comment with specific issues and suggested fixes
+- **Unassign self** + replace label with `ready-for-dev`
+
+**If review fails (critical — game is broken):**
+- Fix the bug directly, commit with `fix(game-name): description`, push
+- Comment with what was fixed + commit SHA
+- **Unassign self** + replace label with `ready-for-test`
+
+---
+
+### AWR-5: Tester Agent Behavior (runs every 6 hours)
+
+**Purpose**: Verify games work correctly in a real browser before closing issues.
+
+**On each run:**
+1. `git pull` to get latest changes
+2. Query issues: label `ready-for-test` + unassigned
+3. Pick the oldest issue
+4. **Assign self** + replace label with `in-progress`
+5. Serve the site: `python3 -m http.server 8080`
+6. Open the relevant game in a browser
+7. Test against `tests/checklist.md` criteria
+
+**Test checklist per game:**
+- Game loads without errors
+- Core gameplay mechanic works (tap, drag, click)
+- Sound effects play
+- Completion celebration triggers
+- "Back to Games" button returns to landing page
+- No console errors
+- Works on different viewport sizes
+
+**If test passes:**
+- Comment with test summary (what was tested, results)
+- Update `tests/checklist.md` — check off passing items
+- **Unassign self** + replace label with `done`
+- **Close the issue**
+
+**If test fails:**
+- Comment with specific failures (steps to reproduce, screenshots if possible)
+- **Unassign self** + replace label with `ready-for-dev`
+- Issue goes back to Dev for rework
+
+---
+
+### AWR-6: Shared Conventions
+
+**Repository:**
+- All agents use the same repo: `TechGuyTest/FunWebGames`
+- Branch: `main` (no feature branches — agents work incrementally)
+- All agents `git pull` before starting any work
+- Handle merge conflicts gracefully: pull, rebase, retry
+
+**Commits:**
+- Format: `<type>(<scope>): <description>`
+- Types: `feat`, `fix`, `docs`, `test`, `style`
+- Scope: game folder name (e.g., `color-match`, `landing-page`) or `global`
+
+**Issues:**
+- Title format: clear, actionable (e.g., "Implement Color Match Memory game", "Fix bubble pop sound not playing")
+- Body: reference requirement file, list acceptance criteria
+- Status labels are mutually exclusive — always replace, never stack
+- Always comment before changing labels — leave an audit trail
+
+**Labels to create in the repo:**
+
+| Label | Color | Type |
+|-------|-------|------|
+| `ready-for-dev` | `#0E8A16` (green) | Status |
+| `in-progress` | `#FBCA04` (yellow) | Status |
+| `ready-for-review` | `#1D76DB` (blue) | Status |
+| `ready-for-test` | `#D93F0B` (orange) | Status |
+| `done` | `#6F42C1` (purple) | Status |
+| `milestone` | `#BFDADC` (teal) | Status |
+| `feature` | `#A2EEEF` (light blue) | Category |
+| `bug` | `#D73A4A` (red) | Category |
+| `game` | `#F9D0C4` (pink) | Category |
+| `docs` | `#0075CA` (dark blue) | Category |
+| `priority-high` | `#B60205` (dark red) | Category |
+| `feature-request` | `#C5DEF5` (pale blue) | Category |
+
+---
+
+### AWR-7: Failure Handling
+
+**Agent crashes mid-work:**
+- Issue is stuck as `in-progress` + assigned
+- Stale detection (>2 hours, no comment) allows the next agent to reclaim it
+
+**No issues to process:**
+- Agent does nothing and exits cleanly
+- This is expected and normal — not every run produces work
+
+**Merge conflict:**
+- Agent pulls, rebases, retries
+- If conflict cannot be resolved automatically, agent comments on the issue and resets label to previous state
+
+**All agents idle:**
+- When PM has created the "All requirements complete" milestone and all issues are closed with `done`, the pipeline is complete
+- Agents still run on schedule but find nothing to do — this is the expected end state
