@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FunWebGames - Play & Learn!</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <meta name="description" content="10 fun educational games for children aged 5-7">
+</head>
+<body>
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1 class="page-header__title">🎮 FunWebGames 🎮</h1>
+    <p class="page-header__subtitle">Pick a game and have fun!</p>
+  </header>
+
+  <!-- Game Grid -->
+  <main class="game-grid">
+    <!-- Game 1: Color Match Memory -->
+    <a href="games/color-match/index.html" class="game-card" style="background: linear-gradient(135deg, #FFF0F5 0%, #F0FFF0 100%);">
+      <div class="game-card__thumbnail">🎨</div>
+      <div class="game-card__emoji">🔵</div>
+      <h2 class="game-card__name">Color Match</h2>
+    </a>
+
+    <!-- Game 2: Animal Puzzle -->
+    <a href="games/animal-puzzle/index.html" class="game-card" style="background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F5 100%);">
+      <div class="game-card__thumbnail">🧩</div>
+      <div class="game-card__emoji">🐱</div>
+      <h2 class="game-card__name">Animal Puzzle</h2>
+    </a>
+
+    <!-- Game 3: Bubble Pop -->
+    <a href="games/bubble-pop/index.html" class="game-card" style="background: linear-gradient(135deg, #FFF9F0 0%, #F0F8FF 100%);">
+      <div class="game-card__thumbnail">🫧</div>
+      <div class="game-card__emoji">🔢</div>
+      <h2 class="game-card__name">Bubble Pop</h2>
+    </a>
+
+    <!-- Game 4: Shape Builder -->
+    <a href="games/shape-builder/index.html" class="game-card" style="background: linear-gradient(135deg, #F0FFF0 0%, #FFF9F0 100%);">
+      <div class="game-card__thumbnail">🔷</div>
+      <div class="game-card__emoji">🏠</div>
+      <h2 class="game-card__name">Shape Builder</h2>
+    </a>
+
+    <!-- Game 5: Counting Garden -->
+    <a href="games/counting-garden/index.html" class="game-card" style="background: linear-gradient(135deg, #FFF0F5 0%, #F0FFF0 100%);">
+      <div class="game-card__thumbnail">🌸</div>
+      <div class="game-card__emoji">🦋</div>
+      <h2 class="game-card__name">Counting Garden</h2>
+    </a>
+
+    <!-- Game 6: Letter Explorer -->
+    <a href="games/letter-explorer/index.html" class="game-card" style="background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F5 100%);">
+      <div class="game-card__thumbnail">🔤</div>
+      <div class="game-card__emoji">🅰️</div>
+      <h2 class="game-card__name">Letter Explorer</h2>
+    </a>
+
+    <!-- Game 7: Music Maker -->
+    <a href="games/music-maker/index.html" class="game-card" style="background: linear-gradient(135deg, #FFF9F0 0%, #F0F8FF 100%);">
+      <div class="game-card__thumbnail">🎵</div>
+      <div class="game-card__emoji">🎹</div>
+      <h2 class="game-card__name">Music Maker</h2>
+    </a>
+
+    <!-- Game 8: Maze Runner -->
+    <a href="games/maze-runner/index.html" class="game-card" style="background: linear-gradient(135deg, #F0FFF0 0%, #FFF9F0 100%);">
+      <div class="game-card__thumbnail">🗺️</div>
+      <div class="game-card__emoji">🐰</div>
+      <h2 class="game-card__name">Maze Runner</h2>
+    </a>
+
+    <!-- Game 9: Star Catcher -->
+    <a href="games/star-catcher/index.html" class="game-card" style="background: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 100%);">
+      <div class="game-card__thumbnail">⭐</div>
+      <div class="game-card__emoji">🌙</div>
+      <h2 class="game-card__name">Star Catcher</h2>
+    </a>
+
+    <!-- Game 10: Dress Up -->
+    <a href="games/dress-up/index.html" class="game-card" style="background: linear-gradient(135deg, #F0F8FF 0%, #FFF0F5 100%);">
+      <div class="game-card__thumbnail">👗</div>
+      <div class="game-card__emoji">🎀</div>
+      <h2 class="game-card__name">Dress Up</h2>
+    </a>
+  </main>
+
+  <script>
+    // Add playful sound effects on card click (GR-3: Audio & Feedback)
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Create a soft "pop" sound using Web Audio API
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.value = 600;
+          oscillator.type = 'sine';
+          
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 0.2);
+        } catch (err) {
+          // Audio not supported, continue silently
+        }
+      });
+    });
+  </script>
+</body>
+</html>
