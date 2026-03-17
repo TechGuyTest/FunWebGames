@@ -281,6 +281,28 @@ p {
   }
 }
 
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 .animate-bounce {
   animation: bounce 1s ease infinite;
 }
@@ -291,6 +313,34 @@ p {
 
 .animate-sparkle {
   animation: sparkle 0.8s ease infinite;
+}
+
+.animate-confetti {
+  animation: confetti 1.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out forwards;
+}
+
+/* ===== Component Classes ===== */
+.card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.celebration {
+  display: inline-block;
+  font-size: 2rem;
+  animation: bounce 0.6s ease infinite;
 }
 
 /* ===== Utility Classes ===== */
