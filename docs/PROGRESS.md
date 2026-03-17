@@ -8,11 +8,11 @@
 
 | # | Game | Status | Issues | Last Updated |
 |---|------|--------|--------|-------------|
-| 1 | Color Match Memory | Implementation ready | #3 | 2026-03-17 |
+| 1 | Color Match Memory | In development | #3 | 2026-03-17 |
 | 2 | Animal Puzzle | Implementation ready | #4 | 2026-03-17 |
 | 3 | Bubble Pop | Implementation ready | #5 | 2026-03-17 |
-| 4 | Shape Builder | Requirements ready | #6 | 2026-03-17 |
-| 5 | Counting Garden | Requirements ready | #7 | 2026-03-17 |
+| 4 | Shape Builder | Implementation ready | #6 | 2026-03-17 |
+| 5 | Counting Garden | Implementation ready | #7 | 2026-03-17 |
 | 6 | Letter Explorer | Not started | — | — |
 | 7 | Music Maker | Not started | — | — |
 | 8 | Maze Runner | Not started | — | — |
@@ -40,7 +40,7 @@
 
 | # | Title | Labels | Status |
 |---|-------|--------|--------|
-| #3 | Implement Color Match Memory Game | ready-for-dev, game | Ready for Dev |
+| #3 | Implement Color Match Memory Game | in-progress, game | In Progress |
 | #4 | Implement Animal Puzzle Drag-and-Drop Game | ready-for-dev, game | Ready for Dev |
 | #5 | Implement Bubble Pop Number/Letter Game | ready-for-dev, game | Ready for Dev |
 | #6 | Implement Shape Builder Geometry Game | ready-for-dev, game | Ready for Dev |
@@ -49,6 +49,7 @@
 ## Notes
 
 - Landing page (#1) and Shared CSS (#2) completed and closed
-- 5 game issues ready-for-dev at maximum capacity
+- Color Match Memory (#3) now in development
+- 4 game issues ready-for-dev
 - 5 more games need requirements and issues (Letter Explorer, Music Maker, Maze Runner, Star Catcher, Dress Up)
-- Waiting for Dev Agent to start implementing games
+- At maximum capacity - waiting for issues to close before creating new ones
