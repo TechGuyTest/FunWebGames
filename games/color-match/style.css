@@ -1,0 +1,246 @@
+/* Color Match Memory Game - Specific Styles */
+
+/* Game Header */
+.game-header {
+  text-align: center;
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.game-header h1 {
+  margin-bottom: var(--space-md);
+}
+
+/* Difficulty Selector */
+.difficulty-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.difficulty-label {
+  font-weight: bold;
+  color: var(--color-text-dark);
+}
+
+.difficulty-btn {
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1.5rem;
+  background: var(--color-light-gray);
+  border: 2px solid var(--color-medium-gray);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.difficulty-btn:hover,
+.difficulty-btn:focus {
+  background: var(--color-primary-yellow);
+  border-color: var(--color-primary-yellow);
+  transform: scale(1.1);
+}
+
+.difficulty-btn.active {
+  background: var(--color-primary-blue);
+  border-color: var(--color-primary-blue);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* Stats Bar */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  background: var(--color-white);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.stat-label {
+  font-weight: bold;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-primary-blue);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Game Grid */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  padding: var(--space-md);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .game-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-xs);
+  }
+}
+
+/* Card Styles */
+.card-game {
+  aspect-ratio: 1;
+  perspective: 1000px;
+  cursor: pointer;
+  min-width: 80px;
+  min-height: 80px;
+}
+
+@media (max-width: 480px) {
+  .card-game {
+    min-width: 60px;
+    min-height: 60px;
+  }
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card-game.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-game.matched .card-inner {
+  animation: pulse 1s ease infinite;
+}
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+@media (max-width: 480px) {
+  .card-front,
+  .card-back {
+    font-size: 1.5rem;
+  }
+}
+
+/* Card Back (face-down) */
+.card-back {
+  background: linear-gradient(135deg, var(--color-primary-blue) 0%, var(--color-primary-purple) 100%);
+  border: 3px solid var(--color-white);
+}
+
+.card-back::after {
+  content: '❓';
+  font-size: 2rem;
+}
+
+@media (max-width: 480px) {
+  .card-back::after {
+    font-size: 1.25rem;
+  }
+}
+
+/* Card Front (face-up) */
+.card-front {
+  background: var(--color-white);
+  border: 3px solid var(--color-medium-gray);
+  transform: rotateY(180deg);
+}
+
+.card-game.matched .card-front {
+  border-color: var(--color-success);
+  box-shadow: 0 0 20px var(--color-success);
+}
+
+/* Shape Colors */
+.shape-red { color: var(--color-primary-red); }
+.shape-blue { color: var(--color-primary-blue); }
+.shape-green { color: var(--color-success); }
+.shape-yellow { color: var(--color-warning); }
+.shape-purple { color: var(--color-primary-purple); }
+.shape-orange { color: var(--color-primary-orange); }
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fade-in 0.3s ease;
+}
+
+.modal-content {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  animation: slide-in-up 0.3s ease;
+}
+
+/* Confetti Container */
+#confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1500;
+  overflow: hidden;
+}
+
+/* Sparkle Effect */
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary-yellow);
+  border-radius: var(--radius-full);
+  animation: sparkle 0.8s ease forwards;
+  pointer-events: none;
+}
