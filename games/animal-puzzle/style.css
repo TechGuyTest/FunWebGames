@@ -1,0 +1,287 @@
+/* Animal Puzzle Game - Specific Styles */
+
+.game-header {
+  text-align: center;
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.game-header h1 {
+  margin-bottom: var(--space-md);
+}
+
+.difficulty-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.difficulty-label {
+  font-weight: bold;
+  color: var(--color-text-dark);
+}
+
+.difficulty-btn {
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1.5rem;
+  background: var(--color-light-gray);
+  border: 2px solid var(--color-medium-gray);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.difficulty-btn:hover,
+.difficulty-btn:focus {
+  background: var(--color-primary-yellow);
+  border-color: var(--color-primary-yellow);
+  transform: scale(1.1);
+}
+
+.difficulty-btn.active {
+  background: var(--color-primary-blue);
+  border-color: var(--color-primary-blue);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  background: var(--color-white);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.stat-label {
+  font-weight: bold;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-primary-blue);
+  min-width: 60px;
+  text-align: center;
+}
+
+.puzzle-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  padding: var(--space-md);
+}
+
+.puzzle-board {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  background: var(--color-light-gray);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .puzzle-board {
+    max-width: 600px;
+  }
+}
+
+.piece-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.ghost-outline {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.3);
+  border: 2px dashed var(--color-medium-gray);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-normal);
+}
+
+.ghost-outline.filled {
+  background: transparent;
+  border-color: transparent;
+}
+
+.puzzle-piece {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  z-index: 100;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.puzzle-piece:active {
+  cursor: grabbing;
+}
+
+.puzzle-piece.dragging {
+  z-index: 1000;
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.puzzle-piece.placed {
+  cursor: default;
+  pointer-events: none;
+  animation: place-piece 0.3s ease;
+}
+
+.puzzle-piece.placed.correct {
+  animation: glow-piece 0.5s ease;
+}
+
+@keyframes place-piece {
+  0% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glow-piece {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-success);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-success), 0 0 30px var(--color-success);
+  }
+}
+
+.piece-pool {
+  min-height: 150px;
+  background: var(--bg-pastel-peach);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.piece-pool::before {
+  content: 'Drag pieces from here!';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-text-light);
+  font-weight: bold;
+  font-size: 1.25rem;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.piece-pool.has-pieces::before {
+  display: none;
+}
+
+/* Animal Completion Animation */
+.animal-complete .puzzle-board {
+  animation: celebrate-animal 1s ease infinite;
+}
+
+@keyframes celebrate-animal {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.animal-bounce {
+  animation: animal-bounce 0.5s ease 3;
+}
+
+@keyframes animal-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fade-in 0.3s ease;
+}
+
+.modal-content {
+  background: var(--color-white);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  max-width: 400px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  animation: slide-in-up 0.3s ease;
+}
+
+/* Confetti */
+#confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1500;
+  overflow: hidden;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .stats-bar {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .puzzle-board {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .difficulty-selector {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .difficulty-btn {
+    width: 100%;
+  }
+}
