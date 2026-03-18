@@ -1,0 +1,349 @@
+/* Shape Builder Game - Styles */
+/* Follows GR-2: Visual Design & GR-4: Responsive & Touch */
+
+/* ===== Layout ===== */
+.game-container {
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.game-header h1 {
+  color: var(--color-purple);
+}
+
+.level-info {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-blue);
+  background: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.game-area {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-lg);
+  min-height: calc(100vh - 200px);
+}
+
+/* ===== Shape Palette ===== */
+.shape-palette {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+}
+
+.shape-palette h2 {
+  color: var(--color-purple);
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.25rem;
+}
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.palette-item {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: 60px;
+  background: var(--bg-soft-blue);
+  border: 3px solid var(--color-blue);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  transition: transform 0.2s, box-shadow 0.2s;
+  user-select: none;
+  touch-action: none;
+}
+
+.palette-item:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.palette-item.dragging {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+  cursor: grabbing;
+}
+
+.palette-item svg {
+  width: 80%;
+  height: 80%;
+}
+
+.palette-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+/* ===== Canvas Area ===== */
+.canvas-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.target-container {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.target-container h2 {
+  color: var(--color-green);
+  margin-bottom: var(--spacing-sm);
+}
+
+.target-display {
+  max-width: 400px;
+  height: 300px;
+  margin: 0 auto;
+  background: var(--bg-soft-blue);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.target-display svg {
+  max-width: 100%;
+  max-height: 100%;
+  opacity: 0.5;
+}
+
+.canvas-container {
+  flex: 1;
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.game-canvas {
+  flex: 1;
+  min-height: 400px;
+  background: var(--bg-soft-green);
+  border: 3px dashed var(--color-green);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-canvas.grid-visible {
+  background-image: 
+    linear-gradient(var(--color-green) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-green) 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-color: var(--bg-soft-green);
+}
+
+.trash-zone {
+  padding: var(--spacing-sm);
+  background: var(--bg-soft-pink);
+  border: 2px dashed var(--color-red);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  color: var(--color-red);
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.trash-zone.drag-over {
+  background: var(--color-red);
+  color: white;
+}
+
+/* ===== Placed Shapes on Canvas ===== */
+.placed-shape {
+  position: absolute;
+  cursor: grab;
+  touch-action: none;
+  transition: filter 0.2s;
+}
+
+.placed-shape.dragging {
+  transform: scale(1.1);
+  filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.2));
+  cursor: grabbing;
+  z-index: 100;
+}
+
+.placed-shape.correct {
+  animation: glow 0.5s ease-in-out;
+}
+
+@keyframes glow {
+  0%, 100% { filter: drop-shadow(0 0 5px var(--color-yellow)); }
+  50% { filter: drop-shadow(0 0 20px var(--color-yellow)); }
+}
+
+.shape-controls {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--spacing-xs);
+  background: white;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.shape-controls button {
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 1rem;
+  border: none;
+  background: var(--color-blue);
+  color: white;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.shape-controls button:hover {
+  background: var(--color-purple);
+}
+
+/* ===== Modal ===== */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: white;
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  width: 90%;
+}
+
+.modal-content h2 {
+  color: var(--color-yellow);
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.modal-content p {
+  color: var(--text-dark);
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.25rem;
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+/* ===== Hint Overlay ===== */
+.hint-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.hint-shape {
+  position: absolute;
+  border: 2px dashed var(--color-yellow);
+  background: rgba(255, 230, 109, 0.3);
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .game-area {
+    grid-template-columns: 1fr;
+  }
+
+  .shape-palette {
+    order: 2;
+  }
+
+  .palette-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .canvas-container {
+    order: 1;
+  }
+
+  .target-display {
+    height: 200px;
+  }
+
+  .game-canvas {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .palette-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .palette-item {
+    min-height: 50px;
+  }
+}
+
+/* ===== Confetti Animation ===== */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--color-yellow);
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
