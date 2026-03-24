@@ -1,0 +1,268 @@
+/* Star Catcher - Game Specific Styles */
+/* Follows GR-2: Visual Design */
+
+/* ===== Game Container ===== */
+.game-container {
+  min-height: 100vh;
+  padding: var(--spacing-md);
+  padding-top: calc(var(--spacing-xl) + var(--touch-target) + var(--spacing-sm));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Game Area ===== */
+.game-area {
+  position: relative;
+  background: linear-gradient(180deg, #0a0a2a 0%, #1a1a4a 100%);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 100%;
+  overflow: hidden;
+}
+
+#game-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Score Display ===== */
+.score-display {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  max-width: 80%;
+  z-index: 10;
+}
+
+.score-star {
+  font-size: 1.5rem;
+  animation: pop-in 0.3s ease-out;
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Timer Display ===== */
+.timer-display {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  z-index: 10;
+  transition: color 0.3s ease;
+}
+
+.timer-display.green {
+  color: #95E1D3;
+}
+
+.timer-display.yellow {
+  color: #FFE66D;
+}
+
+.timer-display.red {
+  color: #FF6B6B;
+}
+
+/* ===== Counter Display ===== */
+.counter-display {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  z-index: 10;
+}
+
+/* ===== Controls ===== */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+}
+
+.arrow-btn {
+  min-width: 60px;
+  min-height: 60px;
+  font-size: 2rem;
+  background: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-btn:hover,
+.arrow-btn:active {
+  background: var(--color-blue);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.arrow-btn:active {
+  transform: translateY(0);
+}
+
+/* ===== Game Over Screen ===== */
+.game-over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.game-over-content {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow-lg);
+  animation: slide-in 0.5s ease-out;
+}
+
+.game-over-content h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  color: var(--color-red);
+  margin-bottom: var(--spacing-lg);
+}
+
+.final-score {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: var(--spacing-lg);
+  min-height: 60px;
+}
+
+.final-score .score-star {
+  font-size: 2rem;
+  animation: pop-in 0.3s ease-out;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.play-again-btn,
+.back-to-games-btn {
+  min-width: 200px;
+  font-size: 1.125rem;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 640px) {
+  .game-area {
+    padding: var(--spacing-xs);
+  }
+
+  .score-star {
+    font-size: 1.25rem;
+  }
+
+  .timer-display,
+  .counter-display {
+    font-size: 1.25rem;
+    padding: 4px 8px;
+  }
+
+  .arrow-btn {
+    min-width: 55px;
+    min-height: 55px;
+    font-size: 1.5rem;
+  }
+
+  .game-over-content {
+    padding: var(--spacing-md);
+  }
+
+  .final-score .score-star {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-area {
+    max-width: 700px;
+  }
+
+  .score-star {
+    font-size: 1.75rem;
+  }
+}
+
+/* ===== Twinkling Background Stars (CSS) ===== */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .score-star,
+  .final-score .score-star {
+    animation: none;
+  }
+
+  .game-over-content {
+    animation: none;
+  }
+
+  .arrow-btn:hover,
+  .arrow-btn:active {
+    transform: none;
+  }
+}

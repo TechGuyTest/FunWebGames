@@ -5,15 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Star Catcher - FunWebGames</title>
   <link rel="stylesheet" href="../../css/shared.css">
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Catch falling stars with your basket!">
 </head>
 <body>
   <a href="../../index.html" class="btn btn-back">← Back to Games</a>
+
   <main class="game-container">
     <div class="game-area">
-      <h1 class="text-center">⭐ Star Catcher</h1>
-      <p class="text-center mt-md">Game coming soon!</p>
-      <p class="text-center mt-sm">Move the basket to catch falling stars!</p>
+      <canvas id="game-canvas"></canvas>
+      
+      <div class="score-display" id="score-display">
+        <!-- Star icons will be added here dynamically -->
+      </div>
+      
+      <div class="timer-display" id="timer-display">60s</div>
+      <div class="counter-display" id="counter-display">0/20</div>
+    </div>
+    
+    <div class="controls">
+      <button class="arrow-btn left" data-direction="left" aria-label="Move basket left">←</button>
+      <button class="arrow-btn right" data-direction="right" aria-label="Move basket right">→</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div class="game-over hidden" id="game-over-screen">
+      <div class="game-over-content">
+        <h2>Game Over! 🌟</h2>
+        <div class="final-score" id="final-score">
+          <!-- Final score stars will be displayed here -->
+        </div>
+        <div class="buttons">
+          <button class="btn btn-primary play-again-btn" id="play-again-btn">🎮 Play Again</button>
+          <button class="btn btn-secondary back-to-games-btn" id="back-to-games-btn">← Back to Games</button>
+        </div>
+      </div>
     </div>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
