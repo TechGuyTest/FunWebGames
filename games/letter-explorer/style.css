@@ -1,0 +1,316 @@
+/* Letter Explorer - Game Specific Styles */
+/* Follows GR-2: Visual Design */
+
+/* ===== Letter Explorer Container ===== */
+.letter-explorer-container {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* ===== Letter Display Area ===== */
+.letter-display {
+  position: relative;
+  height: 40vh;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  transition: background-color 0.3s ease;
+}
+
+.letter-large {
+  font-size: clamp(4rem, 15vw, 120px);
+  font-weight: bold;
+  color: var(--color-blue);
+  text-shadow: var(--shadow-md);
+  animation: pulse 2s ease infinite;
+  z-index: 2;
+}
+
+.illustration {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  font-size: clamp(3rem, 8vw, 5rem);
+  animation: bounce 1s ease infinite;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  z-index: 3;
+}
+
+.illustration:hover,
+.illustration:active {
+  transform: scale(1.2);
+}
+
+.letter-text {
+  font-size: clamp(1.25rem, 3vw, 24px);
+  color: var(--text-dark);
+  margin-top: var(--spacing-sm);
+  font-weight: bold;
+  z-index: 2;
+}
+
+/* ===== Tracing Area ===== */
+.tracing-area {
+  position: relative;
+  height: 40vh;
+  min-height: 200px;
+  background: white;
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--color-blue);
+  overflow: hidden;
+  touch-action: none;
+}
+
+#tracing-canvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.tracing-feedback {
+  position: absolute;
+  top: var(--spacing-xs);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.25rem;
+  font-weight: bold;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+}
+
+.tracing-feedback.success {
+  color: var(--color-green);
+}
+
+.tracing-feedback.warning {
+  color: var(--color-orange);
+}
+
+.tracing-feedback.error {
+  color: var(--color-red);
+}
+
+/* ===== Controls ===== */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  height: auto;
+  min-height: 80px;
+}
+
+.nav-button {
+  min-width: 60px;
+  min-height: 60px;
+  font-size: 1.5rem;
+  background: var(--color-blue);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-button:hover,
+.nav-button:active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== Letter Carousel ===== */
+.letter-carousel {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: var(--spacing-xs);
+  max-width: 400px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-blue) var(--bg-light);
+}
+
+.letter-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.letter-carousel::-webkit-scrollbar-track {
+  background: var(--bg-light);
+  border-radius: var(--radius-sm);
+}
+
+.letter-carousel::-webkit-scrollbar-thumb {
+  background: var(--color-blue);
+  border-radius: var(--radius-sm);
+}
+
+.letter-btn {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  background: white;
+  color: var(--text-dark);
+  border: 2px solid var(--color-blue);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.letter-btn:hover,
+.letter-btn:active {
+  background: var(--color-blue);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.letter-btn.active {
+  background: var(--color-blue);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== Mode Toggle ===== */
+.mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.mode-btn {
+  min-width: 80px;
+  min-height: 48px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 1rem;
+  font-weight: bold;
+  background: white;
+  color: var(--text-dark);
+  border: 2px solid var(--color-blue);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-btn:hover,
+.mode-btn:active {
+  background: var(--color-blue);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.mode-btn.active {
+  background: var(--color-blue);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== Try Again Button ===== */
+#try-again-btn {
+  align-self: center;
+  margin-top: var(--spacing-sm);
+}
+
+/* ===== Accuracy Display ===== */
+.accuracy-display {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--color-blue);
+  padding: var(--spacing-sm);
+  background: var(--bg-soft-blue);
+  border-radius: var(--radius-sm);
+}
+
+/* ===== Celebration Message ===== */
+.celebration-message {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--color-green);
+  padding: var(--spacing-md);
+  animation: confetti 1s ease-out;
+}
+
+/* ===== Responsive Adjustments ===== */
+@media (max-width: 640px) {
+  .letter-explorer-container {
+    padding: var(--spacing-sm);
+  }
+
+  .letter-display {
+    height: 35vh;
+  }
+
+  .tracing-area {
+    height: 35vh;
+  }
+
+  .controls {
+    flex-wrap: wrap;
+  }
+
+  .nav-button {
+    min-width: 50px;
+    min-height: 50px;
+  }
+
+  .letter-carousel {
+    max-width: 250px;
+  }
+
+  .letter-btn {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .letter-explorer-container {
+    max-width: 900px;
+  }
+
+  .letter-display {
+    height: 350px;
+  }
+
+  .tracing-area {
+    height: 350px;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  .letter-large,
+  .illustration,
+  .celebration-message {
+    animation: none;
+  }
+}
