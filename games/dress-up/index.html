@@ -5,15 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dress Up - FunWebGames</title>
   <link rel="stylesheet" href="../../css/shared.css">
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Dress up the character with fun clothes and accessories!">
 </head>
 <body>
   <a href="../../index.html" class="btn btn-back">← Back to Games</a>
-  <main class="game-container">
-    <div class="game-area">
-      <h1 class="text-center">👗 Dress Up</h1>
-      <p class="text-center mt-md">Game coming soon!</p>
-      <p class="text-center mt-sm">Drag clothing and accessories onto the character!</p>
+
+  <!-- Character Selection Screen -->
+  <main class="game-container" id="character-select-screen">
+    <div class="character-select-container">
+      <h1 class="page-title">Choose Your Model!</h1>
+      <div class="character-options">
+        <button class="character-option" data-character="boy" aria-label="Choose Boy">
+          <div class="character-preview">👦</div>
+          <div class="character-label">Boy</div>
+        </button>
+        <button class="character-option" data-character="girl" aria-label="Choose Girl">
+          <div class="character-preview">👧</div>
+          <div class="character-label">Girl</div>
+        </button>
+      </div>
+      <button class="btn btn-primary start-btn" id="start-btn" disabled>Start Dressing!</button>
     </div>
   </main>
+
+  <!-- Game Screen -->
+  <main class="game-container hidden" id="game-screen">
+    <div class="action-buttons">
+      <button class="action-btn reset" id="reset-btn" title="Reset">
+        <span class="action-icon">🔄</span>
+      </button>
+      <button class="action-btn randomize" id="randomize-btn" title="Randomize">
+        <span class="action-icon">🎲</span>
+      </button>
+      <button class="action-btn save" id="save-btn" title="Save Outfit">
+        <span class="action-icon">💾</span>
+      </button>
+      <button class="action-btn fashion-show" id="fashion-show-btn" title="Fashion Show">
+        <span class="action-icon">💃</span>
+      </button>
+    </div>
+
+    <div class="category-tabs">
+      <button class="category-tab active" data-category="hats">Hats</button>
+      <button class="category-tab" data-category="tops">Tops</button>
+      <button class="category-tab" data-category="bottoms">Bottoms</button>
+      <button class="category-tab" data-category="shoes">Shoes</button>
+      <button class="category-tab" data-category="accessories">Accessories</button>
+    </div>
+
+    <div class="character-area">
+      <div class="character-container" id="character-container">
+        <div class="character-base" id="character-base">
+          <!-- Base character emoji -->
+        </div>
+        <div class="character-layers" id="character-layers">
+          <!-- Items will be layered here dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <div class="item-carousel">
+      <div class="carousel-container" id="carousel-container">
+        <!-- Items will be added here dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
