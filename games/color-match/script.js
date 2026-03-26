@@ -132,7 +132,21 @@ function initGame() {
   setupDifficultyButtons();
   setupRestartButton();
   setupPlayAgainButton();
+  setupHelpButton();
   startGame();
+}
+
+// Help Button Setup
+function setupHelpButton() {
+  const helpBtn = document.getElementById('help-btn');
+  if (!helpBtn) return;
+  
+  helpBtn.addEventListener('click', () => {
+    HelpModal.show('🎨', 'Flip cards to find matching pairs! Find all the pairs to win!');
+  });
+  
+  // Show help on first visit
+  HelpModal.showIfFirstTime('color-match', '🎨', 'Flip cards to find matching pairs! Find all the pairs to win!');
 }
 
 function resetState() {

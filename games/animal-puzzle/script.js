@@ -208,7 +208,20 @@ function initGame() {
   setupDifficultyButtons();
   setupRestartButton();
   setupPlayAgainButton();
+  setupHelpButton();
   startGame();
+}
+
+// Help Button Setup
+function setupHelpButton() {
+  const helpBtn = document.getElementById('help-btn');
+  if (!helpBtn) return;
+  
+  helpBtn.addEventListener('click', () => {
+    HelpModal.show('🧩', 'Drag puzzle pieces to complete the animal picture!');
+  });
+  
+  HelpModal.showIfFirstTime('animal-puzzle', '🧩', 'Drag puzzle pieces to complete the animal picture!');
 }
 
 function setupDifficultyButtons() {

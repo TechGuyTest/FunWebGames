@@ -128,6 +128,19 @@ function initGame() {
   setupModeSelector();
   setupRestartButton();
   setupPlayAgainButton();
+  setupHelpButton();
+}
+
+// Help Button Setup
+function setupHelpButton() {
+  const helpBtn = document.getElementById('help-btn');
+  if (!helpBtn) return;
+  
+  helpBtn.addEventListener('click', () => {
+    HelpModal.show('🫧', 'Pop the bubbles that match the picture!');
+  });
+  
+  HelpModal.showIfFirstTime('bubble-pop', '🫧', 'Pop the bubbles that match the picture!');
 }
 
 function setupModeSelector() {
