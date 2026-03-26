@@ -548,3 +548,46 @@ p {
   border-color: var(--color-red);
   background: var(--bg-soft-pink);
 }
+
+/* ===== Install Prompt ===== */
+.install-prompt {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  z-index: 9998;
+  max-width: 90%;
+  width: 500px;
+}
+
+.install-prompt p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-dark);
+  flex: 1;
+}
+
+.install-prompt .btn {
+  min-width: auto;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .install-prompt {
+    flex-direction: column;
+    bottom: var(--spacing-md);
+    width: calc(90% - var(--spacing-lg));
+  }
+  
+  .install-prompt .btn {
+    width: 100%;
+  }
+}

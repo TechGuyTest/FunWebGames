@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline - FunWebGames</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <style>
+    .offline-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--spacing-xl);
+      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-soft-blue) 100%);
+    }
+    
+    .offline-icon {
+      font-size: clamp(5rem, 15vw, 10rem);
+      margin-bottom: var(--spacing-lg);
+    }
+    
+    .offline-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--color-red);
+      margin-bottom: var(--spacing-md);
+    }
+    
+    .offline-message {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--text-dark);
+      max-width: 500px;
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.6;
+    }
+    
+    .offline-tips {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      box-shadow: var(--shadow-md);
+      max-width: 500px;
+      text-align: left;
+    }
+    
+    .offline-tips h3 {
+      color: var(--color-blue);
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .offline-tips ul {
+      margin: 0;
+      padding-left: var(--spacing-lg);
+    }
+    
+    .offline-tips li {
+      margin-bottom: var(--spacing-xs);
+      color: var(--text-dark);
+    }
+    
+    .retry-btn {
+      margin-top: var(--spacing-lg);
+      min-width: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container">
+    <div class="offline-icon">📡</div>
+    
+    <h1 class="offline-title">You're Offline</h1>
+    
+    <p class="offline-message">
+      Don't worry! You can still play your favorite games. 
+      The games you've visited before are saved on your device.
+    </p>
+    
+    <div class="offline-tips">
+      <h3>💡 Tips:</h3>
+      <ul>
+        <li>Games you've played before will work offline</li>
+        <li>Connect to the internet to play all games</li>
+        <li>Your high scores are saved on this device</li>
+      </ul>
+    </div>
+    
+    <button class="btn btn-primary retry-btn" onclick="window.location.reload()">
+      🔄 Try Again
+    </button>
+  </div>
+  
+  <script>
+    // Auto-retry when connection is restored
+    window.addEventListener('online', () => {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

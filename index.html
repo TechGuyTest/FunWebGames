@@ -6,10 +6,20 @@
   <title>FunWebGames - Play & Learn!</title>
   <link rel="stylesheet" href="css/shared.css">
   <meta name="description" content="10 fun educational games for children aged 5-7">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF6B6B">
+  <link rel="apple-touch-icon" href="icons/icon-192x192.png">
 </head>
 <body>
   <!-- Skip Link for Accessibility -->
   <a href="#game-grid" class="skip-link">Skip to games</a>
+  
+  <!-- Install Prompt (hidden by default) -->
+  <div id="install-prompt" class="install-prompt hidden">
+    <p>📲 Install FunWebGames to play offline!</p>
+    <button class="btn btn-primary" id="install-btn">Install</button>
+    <button class="btn btn-secondary" id="dismiss-install">Not Now</button>
+  </div>
   
   <!-- Page Header -->
   <header class="page-header">
@@ -142,6 +152,55 @@
         }
       });
     }
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('[SW] Registration successful:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('[SW] Registration failed:', error);
+          });
+      });
+    }
+
+    // Install Prompt
+    let deferredPrompt;
+    const installPrompt = document.getElementById('install-prompt');
+    const installBtn = document.getElementById('install-btn');
+    const dismissInstall = document.getElementById('dismiss-install');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installPrompt.classList.remove('hidden');
+    });
+
+    if (installBtn) {
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log('[Install] User choice:', outcome);
+          deferredPrompt = null;
+          installPrompt.classList.add('hidden');
+        }
+      });
+    }
+
+    if (dismissInstall) {
+      dismissInstall.addEventListener('click', () => {
+        installPrompt.classList.add('hidden');
+      });
+    }
+
+    window.addEventListener('appinstalled', () => {
+      console.log('[Install] App installed');
+      installPrompt.classList.add('hidden');
+      deferredPrompt = null;
+    });
   </script>
 </body>
 </html>
