@@ -42,7 +42,7 @@
 | # | Title | Labels | Status |
 |---|-------|--------|--------|
 | 16 | Add Test Automation Scripts | enhancement, ready-for-test | Ready for test |
-| 17 | Add LocalStorage High Score System to Games | enhancement, in-progress | In progress |
+| 17 | Add LocalStorage High Score System to Games | enhancement, ready-for-review | Ready for review |
 
 **Total**: 2 open issues
 
@@ -54,7 +54,7 @@
 - All games have passed code review and testing
 - Milestone issue #14 CLOSED - PROJECT COMPLETE ✅
 - Issue #16: Add Test Automation Scripts (enhancement, ready-for-test)
-- Issue #17: Add LocalStorage High Score System (enhancement, in-progress)
+- Issue #17: Add LocalStorage High Score System (enhancement, ready-for-review)
 - All core requirements fulfilled - enhancements being processed
 
 ## Implementation Status Summary
