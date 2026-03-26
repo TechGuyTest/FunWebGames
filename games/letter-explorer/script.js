@@ -40,6 +40,7 @@ let isTracing = false;
 let tracePoints = [];
 let isDrawing = false;
 let tracingComplete = false;
+let lettersCompleted = 0;
 
 // ===== DOM Elements =====
 const letterDisplay = document.getElementById("letter-display");
@@ -57,6 +58,11 @@ const tryAgainBtn = document.getElementById("try-again-btn");
 const accuracyDisplay = document.getElementById("accuracy-display");
 const accuracyValue = document.getElementById("accuracy-value");
 const celebrationMessage = document.getElementById("celebration-message");
+const lettersCompletedDisplay = document.createElement("div");
+lettersCompletedDisplay.className = "celebration-stats";
+lettersCompletedDisplay.style.marginTop = "var(--spacing-sm)";
+lettersCompletedDisplay.style.fontSize = "1.125rem";
+celebrationMessage.insertBefore(lettersCompletedDisplay, celebrationMessage.firstChild);
 
 // ===== Canvas Setup =====
 const ctx = tracingCanvas.getContext("2d");
@@ -376,6 +382,29 @@ function resetTracing() {
 }
 
 function showCelebration() {
+  // Increment letters completed
+  lettersCompleted++;
+  
+  // Check and save high score (higher is better)
+  const metricKey = 'letters';
+  const isNewRecord = HighScore.set('letter-explorer', metricKey, lettersCompleted, 'high');
+  
+  // Display count and best score
+  const bestScore = HighScore.get('letter-explorer', metricKey);
+  if (bestScore !== null) {
+    if (isNewRecord && lettersCompleted === bestScore) {
+      lettersCompletedDisplay.textContent = `🎉 ${lettersCompleted}/26 letters! 🏆 New Record!`;
+      lettersCompletedDisplay.style.color = 'var(--color-red)';
+      lettersCompletedDisplay.style.fontWeight = 'bold';
+    } else {
+      lettersCompletedDisplay.textContent = `${lettersCompleted}/26 letters (Best: ${bestScore})`;
+      lettersCompletedDisplay.style.color = 'var(--text-light)';
+      lettersCompletedDisplay.style.fontWeight = 'normal';
+    }
+  } else {
+    lettersCompletedDisplay.textContent = `${lettersCompleted}/26 letters completed!`;
+  }
+  
   celebrationMessage.classList.remove("hidden");
   tryAgainBtn.classList.remove("hidden");
 }

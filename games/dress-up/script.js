@@ -90,6 +90,7 @@ const items = {
 let selectedCharacter = null;
 let currentCategory = 'hats';
 let wornItems = {}; // { category: item }
+let outfitCount = 0;
 let isDragging = false;
 let draggedItem = null;
 let dragOffset = { x: 0, y: 0 };
@@ -115,6 +116,8 @@ const resetBtn = document.getElementById('reset-btn');
 const randomizeBtn = document.getElementById('randomize-btn');
 const saveBtn = document.getElementById('save-btn');
 const fashionShowBtn = document.getElementById('fashion-show-btn');
+const outfitCountDisplay = document.getElementById('outfit-count');
+const bestOutfitsDisplay = document.getElementById('best-outfits');
 
 // ===== Character Selection =====
 characterOptions.forEach(option => {
@@ -441,6 +444,34 @@ saveBtn.addEventListener('click', () => {
   playSound('camera');
 });
 
+// ===== High Score Tracking =====
+function updateOutfitCount() {
+  outfitCount++;
+  if (outfitCountDisplay) {
+    outfitCountDisplay.textContent = outfitCount;
+  }
+  
+  // Check and save high score (higher is better)
+  const metricKey = 'outfits';
+  const isNewRecord = HighScore.set('dress-up', metricKey, outfitCount, 'high');
+  
+  // Display best score
+  if (bestOutfitsDisplay) {
+    const bestScore = HighScore.get('dress-up', metricKey);
+    if (bestScore !== null) {
+      if (isNewRecord && outfitCount === bestScore) {
+        bestOutfitsDisplay.textContent = `${bestScore} 🏆`;
+        bestOutfitsDisplay.style.color = 'var(--color-red)';
+        bestOutfitsDisplay.style.fontWeight = 'bold';
+      } else {
+        bestOutfitsDisplay.textContent = bestScore;
+        bestOutfitsDisplay.style.color = 'var(--text-light)';
+        bestOutfitsDisplay.style.fontWeight = 'normal';
+      }
+    }
+  }
+}
+
 // ===== Screenshot Generation =====
 function saveOutfit() {
   const canvas = document.createElement('canvas');
@@ -472,6 +503,9 @@ function saveOutfit() {
       ctx.fillText(item.emoji, (rect.width * pos.x) / 100, (rect.height * pos.y) / 100);
     }
   });
+  
+  // Track outfit creation
+  updateOutfitCount();
   
   // Download
   const link = document.createElement('a');

@@ -207,6 +207,8 @@ const timerEl = document.getElementById('timer');
 const arrowBtns = document.querySelectorAll('.arrow-btn');
 const completionScreen = document.getElementById('completion-screen');
 const finalStarsEl = document.getElementById('final-stars');
+const finalTimeDisplay = document.getElementById('final-time-display');
+const bestTimeDisplay = document.getElementById('best-time-display');
 const nextBtn = document.getElementById('next-btn');
 const musicToggle = document.getElementById('music-toggle');
 
@@ -685,9 +687,43 @@ function getCanvasPosition(e) {
 // ===== Game Logic =====
 function completeMaze() {
   stopTimer();
+  
+  // Get elapsed time in seconds
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  
+  // Check and save high score (lower time is better)
+  const mazeNum = currentMazeIndex + 1;
+  const metricKey = `time-maze-${mazeNum}`;
+  const isNewRecord = HighScore.set('maze-runner', metricKey, elapsed, 'low');
+  
   playSound('celebration');
   startConfetti();
   finalStarsEl.textContent = starsCollected;
+  
+  // Display time and best score
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed % 60;
+  const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  finalTimeDisplay.textContent = `Time: ${timeStr}`;
+  
+  const bestScore = HighScore.get('maze-runner', metricKey);
+  if (bestScore !== null) {
+    const bestMinutes = Math.floor(bestScore / 60);
+    const bestSeconds = bestScore % 60;
+    const bestTimeStr = `${bestMinutes}:${bestSeconds.toString().padStart(2, '0')}`;
+    if (isNewRecord && elapsed === bestScore) {
+      bestTimeDisplay.textContent = `🏆 New Record! Best (Maze ${mazeNum}): ${bestTimeStr}`;
+      bestTimeDisplay.style.color = 'var(--color-red)';
+      bestTimeDisplay.style.fontWeight = 'bold';
+    } else {
+      bestTimeDisplay.textContent = `Best (Maze ${mazeNum}): ${bestTimeStr}`;
+      bestTimeDisplay.style.color = 'var(--text-light)';
+      bestTimeDisplay.style.fontWeight = 'normal';
+    }
+  } else {
+    bestTimeDisplay.textContent = '';
+  }
+  
   setTimeout(() => {
     completionScreen.classList.remove('hidden');
   }, 500);

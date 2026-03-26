@@ -34,6 +34,7 @@ let isRecording = false;
 let recording = [];
 let recordingStartTime = 0;
 let isPlaying = false;
+let longestSequence = 0;
 let tempo = 2; // 1=slow, 2=medium, 3=fast
 let audioContext = null;
 
@@ -56,6 +57,7 @@ const tempoDisplay = document.getElementById('tempo-display');
 const statusIndicator = document.getElementById('status-indicator');
 const statusDot = statusIndicator.querySelector('.status-dot');
 const statusText = statusIndicator.querySelector('.status-text');
+const longestSequenceDisplay = document.getElementById('longest-sequence');
 
 // ===== Audio System =====
 function initAudio() {
@@ -165,9 +167,8 @@ function playRecording() {
 function toggleRecording() {
   if (isPlaying) return;
   
-  isRecording = !isRecording;
-  
-  if (isRecording) {
+  if (!isRecording) {
+    // Start recording
     recording = [];
     recordingStartTime = Date.now();
     recordBtn.classList.add('active');
@@ -175,6 +176,24 @@ function toggleRecording() {
     instrumentGrid.classList.add('recording');
     playBtn.disabled = true;
   } else {
+    // Stop recording - check for high score
+    if (recording.length > longestSequence) {
+      longestSequence = recording.length;
+      
+      // Save to localStorage
+      const metricKey = 'sequence';
+      const isNewRecord = HighScore.set('music-maker', metricKey, longestSequence, 'high');
+      
+      // Update display
+      if (longestSequenceDisplay) {
+        longestSequenceDisplay.textContent = longestSequence;
+        if (isNewRecord) {
+          longestSequenceDisplay.style.color = 'var(--color-red)';
+          longestSequenceDisplay.style.fontWeight = 'bold';
+        }
+      }
+    }
+    
     recordBtn.classList.remove('active');
     updateStatus('ready', 'Ready to Play!');
     instrumentGrid.classList.remove('recording');
@@ -182,6 +201,8 @@ function toggleRecording() {
       playBtn.disabled = false;
     }
   }
+  
+  isRecording = !isRecording;
 }
 
 function clearRecording() {
@@ -246,8 +267,19 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Initialize
-updateTempo();
-updateStatus('ready', 'Ready to Play!');
+function initGame() {
+  // Load best score from localStorage
+  const bestScore = HighScore.get('music-maker', 'sequence');
+  if (bestScore !== null && longestSequenceDisplay) {
+    longestSequence = bestScore;
+    longestSequenceDisplay.textContent = longestSequence;
+  }
+  
+  updateTempo();
+  updateStatus('ready', 'Ready to Play!');
+}
+
+initGame();
 
 // Resume audio context on first user interaction
 document.addEventListener('click', initAudio, { once: true });
