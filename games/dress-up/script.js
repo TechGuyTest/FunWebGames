@@ -94,6 +94,14 @@ let isDragging = false;
 let draggedItem = null;
 let dragOffset = { x: 0, y: 0 };
 
+// Animation state
+let previewOpacity = 0;
+let previewItem = null;
+let isSnapping = false;
+let snapScale = 1;
+let discoColors = [];
+let discoPhase = 0;
+
 // ===== DOM Elements =====
 const characterSelectScreen = document.getElementById('character-select-screen');
 const gameScreen = document.getElementById('game-screen');
@@ -190,15 +198,38 @@ function renderCarousel() {
 function handleItemClick(item) {
   if (isDragging) return;
   
-  // Toggle item on/off
-  if (wornItems[item.category] && wornItems[item.category].id === item.id) {
-    delete wornItems[item.category];
-  } else {
-    wornItems[item.category] = item;
-  }
+  // Show preview first
+  showPreview(item);
   
-  updateCharacterLayers();
-  playSound('pop');
+  // Toggle item on/off after brief delay
+  setTimeout(() => {
+    if (wornItems[item.category] && wornItems[item.category].id === item.id) {
+      delete wornItems[item.category];
+    } else {
+      wornItems[item.category] = item;
+    }
+    
+    updateCharacterLayers();
+    playSound('pop');
+  }, 300);
+}
+
+function showPreview(item) {
+  previewItem = item;
+  previewOpacity = 0.5;
+  
+  // Fade out preview
+  const fadeInterval = setInterval(() => {
+    previewOpacity -= 0.05;
+    if (previewOpacity <= 0) {
+      previewOpacity = 0;
+      previewItem = null;
+      clearInterval(fadeInterval);
+      updateCharacterLayers();
+    } else {
+      updateCharacterLayers();
+    }
+  }, 50);
 }
 
 // ===== Drag and Drop =====
@@ -254,6 +285,7 @@ function handleTouchEnd(e) {
     const item = items[draggedItem.category].find(i => i.id === draggedItem.id);
     if (item) {
       wornItems[item.category] = item;
+      isSnapping = true;
       updateCharacterLayers();
       playSound('snap');
     }
@@ -304,6 +336,18 @@ function updateCharacterLayers() {
     
     const itemEl = document.createElement('div');
     itemEl.className = 'character-item';
+    
+    // Check if this is the preview item
+    if (previewItem && previewItem.id === item.id) {
+      itemEl.style.opacity = previewOpacity;
+      itemEl.classList.add('preview');
+    }
+    
+    // Add snap animation class if recently added
+    if (isSnapping && item === draggedItem) {
+      itemEl.classList.add('snap-animation');
+    }
+    
     itemEl.textContent = item.emoji;
     itemEl.style.left = `${pos.x}%`;
     itemEl.style.top = `${pos.y}%`;
@@ -318,6 +362,13 @@ function updateCharacterLayers() {
     
     characterLayers.appendChild(itemEl);
   });
+  
+  // Reset snap state after animation
+  if (isSnapping) {
+    setTimeout(() => {
+      isSnapping = false;
+    }, 300);
+  }
 }
 
 // ===== Action Buttons =====
@@ -339,19 +390,51 @@ randomizeBtn.addEventListener('click', () => {
     }
   });
   
+  // Animate items flying in
+  animateRandomize();
   updateCharacterLayers();
   playSound('twinkle');
 });
+
+function animateRandomize() {
+  characterLayers.classList.add('randomize-active');
+  setTimeout(() => {
+    characterLayers.classList.remove('randomize-active');
+  }, 500);
+}
 
 fashionShowBtn.addEventListener('click', () => {
   const characterContainer = document.getElementById('character-container');
   characterContainer.classList.add('fashion-show-active');
   playSound('celebration');
   
+  // Add disco lights effect
+  startDiscoLights();
+  
   setTimeout(() => {
     characterContainer.classList.remove('fashion-show-active');
-  }, 2000);
+    stopDiscoLights();
+  }, 3000);
 });
+
+function startDiscoLights() {
+  discoPhase = 0;
+  const discoInterval = setInterval(() => {
+    if (!document.getElementById('character-container').classList.contains('fashion-show-active')) {
+      clearInterval(discoInterval);
+      return;
+    }
+    
+    discoPhase = (discoPhase + 1) % 6;
+    const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#DDA0DD', '#FFB347'];
+    document.getElementById('character-container').style.background = 
+      `radial-gradient(circle, ${colors[discoPhase]}40, transparent)`;
+  }, 300);
+}
+
+function stopDiscoLights() {
+  document.getElementById('character-container').style.background = 'transparent';
+}
 
 saveBtn.addEventListener('click', () => {
   saveOutfit();
