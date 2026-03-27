@@ -106,10 +106,17 @@
   </footer>
 
   <script src="js/highscore.js"></script>
+  <script src="js/sound-toggle.js"></script>
   <script>
+    // Initialize Sound Toggle
+    SoundToggle.init();
+
     // Add playful sound effects on card click (GR-3: Audio & Feedback)
     document.querySelectorAll('.game-card').forEach(card => {
       card.addEventListener('click', (e) => {
+        // Check if sounds are muted
+        if (SoundToggle.isMuted()) return;
+        
         // Create a soft "pop" sound using Web Audio API
         try {
           const audioContext = new (window.AudioContext || window.webkitAudioContext)();
