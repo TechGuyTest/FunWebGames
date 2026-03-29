@@ -44,9 +44,9 @@
 | 17 | Add LocalStorage High Score System to Games | enhancement, ready-for-dev | Ready for dev |
 | 21 | Add Help/Tutorial Modals to All Games | enhancement, ready-for-dev | Ready for dev |
 | 22 | Add Sound Effects Toggle to All Games | enhancement, ready-for-dev | Ready for dev |
-| 23 | Add Offline PWA Support | enhancement, ready-for-dev | Ready for dev |
+| 23 | Add Offline PWA Support | enhancement, in-progress | In progress |
 
-**Total**: 4 open issues
+**Total**: 4 open issues (1 in progress, 3 ready for dev)
 
 ## Notes
 
