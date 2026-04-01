@@ -1,0 +1,124 @@
+/**
+ * Accessibility Styles for FunWebGames
+ * Keyboard navigation and screen reader support
+ */
+
+/* Focus indicators for all interactive elements */
+*:focus {
+  outline: 3px solid #FF6B6B;
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 3px solid #FF6B6B;
+  outline-offset: 2px;
+}
+
+/* Game cards - enhanced focus */
+.game-card:focus {
+  outline: 4px solid #FF6B6B;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 8px rgba(255, 107, 107, 0.3);
+  transform: scale(1.05);
+}
+
+/* Buttons - enhanced focus */
+button:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid #FF6B6B;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(255, 107, 107, 0.3);
+}
+
+/* Links - enhanced focus */
+a:focus-visible {
+  outline: 3px solid #FF6B6B;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #FF6B6B;
+  color: white;
+  padding: 8px 16px;
+  z-index: 10000;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  font-weight: bold;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #333;
+  outline-offset: 2px;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .game-card {
+    border: 3px solid #000;
+  }
+  
+  button, .btn {
+    border: 2px solid #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keyboard navigation hint */
+.keyboard-hint {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 1000;
+  display: none;
+}
+
+.keyboard-hint.visible {
+  display: block;
+}
+
+.keyboard-hint kbd {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+}

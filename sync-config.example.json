@@ -1,0 +1,21 @@
+{
+  "api": {
+    "baseUrl": "https://your-api-domain.com/api/v1",
+    "apiKey": "your-api-key-here",
+    "timeout": 30000,
+    "retries": 3
+  },
+  "sync": {
+    "enabled": true,
+    "autoSync": false,
+    "syncInterval": 3600000,
+    "lastSync": null
+  },
+  "endpoints": {
+    "scores": "/scores",
+    "progress": "/progress",
+    "leaderboard": "/leaderboard",
+    "users": "/users"
+  },
+  "dataTypes": ["scores", "progress", "leaderboard"]
+}

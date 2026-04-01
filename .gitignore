@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Configuration files with secrets
+sync-config.json
+*.env
+.env.local
+.env.*.local
+
+# Data files
+data/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build output
+dist/
+build/
