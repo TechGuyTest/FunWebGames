@@ -366,7 +366,8 @@ function handleWin() {
   // Check and save high score (lower moves is better)
   const difficulty = state.difficulty;
   const metricKey = `moves-${difficulty}`;
-  const isNewRecord = HighScore.set('color-match', metricKey, state.moves, 'low');
+  // Sync to cloud if API sync is enabled
+  const isNewRecord = HighScore.set('color-match', metricKey, state.moves, 'low', true);
   
   playSound('win');
   createConfetti();
