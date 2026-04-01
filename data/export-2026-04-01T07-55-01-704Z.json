@@ -1,0 +1,424 @@
+{
+  "scores": [
+    {
+      "game": "color-match",
+      "metric": "moves",
+      "value": 25,
+      "playerName": "Player1",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "score",
+      "value": 150,
+      "playerName": "Player1",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "score",
+      "value": 200,
+      "playerName": "Player3",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "maze-runner",
+      "metric": "time",
+      "value": 45,
+      "playerName": "Player2",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "star-catcher",
+      "metric": "stars",
+      "value": 88,
+      "playerName": "Player1",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "time",
+      "value": 120,
+      "playerName": "Player3",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "score",
+      "value": 500,
+      "playerName": "Player1",
+      "timestamp": 1775030021201
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 499,
+      "playerName": "小红",
+      "timestamp": 1774999673930,
+      "deviceId": "device-4"
+    },
+    {
+      "game": "music-maker",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 15,
+      "playerName": "Player3",
+      "timestamp": 1774991779256,
+      "deviceId": "device-4"
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "time",
+      "metricType": "low",
+      "value": 214,
+      "playerName": "Player1",
+      "timestamp": 1774974667575,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 33,
+      "playerName": "小红",
+      "timestamp": 1774959571015,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "score",
+      "metricType": "high",
+      "value": 168,
+      "playerName": "小红",
+      "timestamp": 1774946631241,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "time",
+      "metricType": "low",
+      "value": 206,
+      "playerName": "Player2",
+      "timestamp": 1774931656964,
+      "deviceId": "device-6"
+    },
+    {
+      "game": "maze-runner",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 58,
+      "playerName": "Player2",
+      "timestamp": 1774930168366,
+      "deviceId": "device-7"
+    },
+    {
+      "game": "shape-builder",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 34,
+      "playerName": "Player1",
+      "timestamp": 1774929411023,
+      "deviceId": "device-0"
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "score",
+      "metricType": "high",
+      "value": 172,
+      "playerName": "小红",
+      "timestamp": 1774922260260,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 40,
+      "playerName": "Player3",
+      "timestamp": 1774905524124,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "maze-runner",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 36,
+      "playerName": "小明",
+      "timestamp": 1774876572746,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "time",
+      "metricType": "low",
+      "value": 324,
+      "playerName": "Player2",
+      "timestamp": 1774858856310,
+      "deviceId": "device-3"
+    },
+    {
+      "game": "color-match",
+      "metric": "time",
+      "metricType": "low",
+      "value": 328,
+      "playerName": "Player1",
+      "timestamp": 1774844892423,
+      "deviceId": "device-0"
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "score",
+      "metricType": "high",
+      "value": 332,
+      "playerName": "Player3",
+      "timestamp": 1774810854709,
+      "deviceId": "device-2"
+    },
+    {
+      "game": "star-catcher",
+      "metric": "time",
+      "metricType": "low",
+      "value": 276,
+      "playerName": "Player1",
+      "timestamp": 1774799546891,
+      "deviceId": "device-4"
+    },
+    {
+      "game": "music-maker",
+      "metric": "score",
+      "metricType": "high",
+      "value": 219,
+      "playerName": "Player3",
+      "timestamp": 1774796198048,
+      "deviceId": "device-6"
+    },
+    {
+      "game": "music-maker",
+      "metric": "score",
+      "metricType": "high",
+      "value": 405,
+      "playerName": "Player1",
+      "timestamp": 1774790577764,
+      "deviceId": "device-2"
+    },
+    {
+      "game": "shape-builder",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 378,
+      "playerName": "Player1",
+      "timestamp": 1774772295653,
+      "deviceId": "device-4"
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 19,
+      "playerName": "小明",
+      "timestamp": 1774761341181,
+      "deviceId": "device-6"
+    },
+    {
+      "game": "shape-builder",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 548,
+      "playerName": "Player2",
+      "timestamp": 1774760176093,
+      "deviceId": "device-5"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "time",
+      "metricType": "low",
+      "value": 309,
+      "playerName": "Player1",
+      "timestamp": 1774755129045,
+      "deviceId": "device-1"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "score",
+      "metricType": "high",
+      "value": 542,
+      "playerName": "小红",
+      "timestamp": 1774724201263,
+      "deviceId": "device-0"
+    },
+    {
+      "game": "star-catcher",
+      "metric": "time",
+      "metricType": "low",
+      "value": 90,
+      "playerName": "小红",
+      "timestamp": 1774707439908,
+      "deviceId": "device-1"
+    },
+    {
+      "game": "color-match",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 45,
+      "playerName": "小明",
+      "timestamp": 1774688311128,
+      "deviceId": "device-3"
+    },
+    {
+      "game": "maze-runner",
+      "metric": "time",
+      "metricType": "low",
+      "value": 99,
+      "playerName": "小明",
+      "timestamp": 1774677791165,
+      "deviceId": "device-6"
+    },
+    {
+      "game": "shape-builder",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 27,
+      "playerName": "小红",
+      "timestamp": 1774634029686,
+      "deviceId": "device-7"
+    },
+    {
+      "game": "color-match",
+      "metric": "score",
+      "metricType": "high",
+      "value": 328,
+      "playerName": "Player1",
+      "timestamp": 1774617838035,
+      "deviceId": "device-3"
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 33,
+      "playerName": "Player2",
+      "timestamp": 1774610148988,
+      "deviceId": "device-2"
+    },
+    {
+      "game": "maze-runner",
+      "metric": "time",
+      "metricType": "low",
+      "value": 312,
+      "playerName": "Player1",
+      "timestamp": 1774556218436,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 536,
+      "playerName": "Player1",
+      "timestamp": 1774549965339,
+      "deviceId": "device-5"
+    },
+    {
+      "game": "color-match",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 18,
+      "playerName": "Player2",
+      "timestamp": 1774531875525,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 386,
+      "playerName": "小明",
+      "timestamp": 1774513119276,
+      "deviceId": "device-1"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "score",
+      "metricType": "high",
+      "value": 297,
+      "playerName": "小明",
+      "timestamp": 1774509988915,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "music-maker",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 325,
+      "playerName": "Player3",
+      "timestamp": 1774507560803,
+      "deviceId": "device-0"
+    },
+    {
+      "game": "star-catcher",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 29,
+      "playerName": "Player1",
+      "timestamp": 1774492825998,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "shape-builder",
+      "metric": "score",
+      "metricType": "high",
+      "value": 385,
+      "playerName": "Player1",
+      "timestamp": 1774483976529,
+      "deviceId": "device-2"
+    },
+    {
+      "game": "bubble-pop",
+      "metric": "moves",
+      "metricType": "low",
+      "value": 17,
+      "playerName": "Player1",
+      "timestamp": 1774476101136,
+      "deviceId": "device-8"
+    },
+    {
+      "game": "letter-explorer",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 487,
+      "playerName": "Player2",
+      "timestamp": 1774469759055,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "animal-puzzle",
+      "metric": "stars",
+      "metricType": "high",
+      "value": 536,
+      "playerName": "Player2",
+      "timestamp": 1774438168843,
+      "deviceId": "device-3"
+    },
+    {
+      "game": "color-match",
+      "metric": "time",
+      "metricType": "low",
+      "value": 225,
+      "playerName": "Player2",
+      "timestamp": 1774433148621,
+      "deviceId": "device-9"
+    },
+    {
+      "game": "maze-runner",
+      "metric": "score",
+      "metricType": "high",
+      "value": 122,
+      "playerName": "Player3",
+      "timestamp": 1774432483070,
+      "deviceId": "device-5"
+    }
+  ],
+  "lastUpdate": 1775030093068,
+  "totalUploads": 0
+}
