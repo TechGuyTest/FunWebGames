@@ -398,6 +398,28 @@ function handleWin() {
   }, 500);
 }
 
+// Add leaderboard button to celebration modal
+function addLeaderboardButton() {
+  const playAgainBtn = document.getElementById('play-again-btn');
+  if (playAgainBtn && !document.getElementById('leaderboard-btn')) {
+    const leaderboardBtn = document.createElement('button');
+    leaderboardBtn.id = 'leaderboard-btn';
+    leaderboardBtn.className = 'btn btn-secondary';
+    leaderboardBtn.style.marginLeft = '8px';
+    leaderboardBtn.textContent = '🏆 Leaderboard';
+    leaderboardBtn.addEventListener('click', () => {
+      const difficulty = state.difficulty;
+      const metricKey = `moves-${difficulty}`;
+      if (typeof LeaderboardWidget !== 'undefined') {
+        LeaderboardWidget.show('color-match', metricKey);
+      } else {
+        alert('Leaderboard widget not loaded');
+      }
+    });
+    playAgainBtn.parentNode.insertBefore(leaderboardBtn, playAgainBtn.nextSibling);
+  }
+}
+
 function createConfetti() {
   const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#DDA0DD', '#FFB347'];
   

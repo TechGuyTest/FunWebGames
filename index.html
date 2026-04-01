@@ -9,6 +9,13 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#FF6B6B">
   <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+  <style>
+    .sync-status {
+      margin-left: 12px;
+      font-size: 13px;
+      color: #999;
+    }
+  </style>
 </head>
 <body>
   <!-- Skip Link for Accessibility -->
@@ -103,8 +110,11 @@
   <!-- Footer with High Score Reset -->
   <footer class="page-footer">
     <button id="reset-scores-btn" class="btn btn--small btn--secondary">🔄 Reset Scores</button>
+    <button id="sync-scores-btn" class="btn btn--small btn--primary">☁️ Sync to Cloud</button>
+    <span id="sync-status" class="sync-status"></span>
   </footer>
 
+  <script src="js/api-demo.js"></script>
   <script src="js/api-config.js"></script>
   <script src="js/api-sync.js"></script>
   <script src="js/highscore.js"></script>
@@ -151,8 +161,54 @@
         if (confirmed) {
           HighScore.reset();
           alert('All scores reset! 🎉');
+          updateSyncStatus();
         }
       });
+    }
+
+    // Sync Scores Button
+    const syncScoresBtn = document.getElementById('sync-scores-btn');
+    const syncStatusEl = document.getElementById('sync-status');
+    
+    function updateSyncStatus() {
+      if (typeof DemoAPISync !== 'undefined') {
+        const status = DemoAPISync.getStatus();
+        if (syncStatusEl) {
+          syncStatusEl.textContent = status.scoreCount > 0 
+            ? `☁️ ${status.scoreCount} scores in cloud` 
+            : '☁️ No cloud scores yet';
+          syncStatusEl.style.color = status.scoreCount > 0 ? '#4CAF50' : '#999';
+        }
+      }
+    }
+    
+    if (syncScoresBtn) {
+      syncScoresBtn.addEventListener('click', async () => {
+        const scores = HighScore.getAll();
+        const scoreCount = Object.keys(scores).length;
+        
+        if (scoreCount === 0) {
+          alert('No scores to sync! Play a game first. 🎮');
+          return;
+        }
+        
+        syncScoresBtn.disabled = true;
+        syncScoresBtn.textContent = '⏳ Syncing...';
+        
+        try {
+          const synced = await HighScore.syncAllToCloud();
+          alert(`✅ Synced ${synced} scores to cloud! ☁️`);
+          updateSyncStatus();
+        } catch (error) {
+          alert('❌ Sync failed: ' + error.message);
+        } finally {
+          syncScoresBtn.disabled = false;
+          syncScoresBtn.textContent = '☁️ Sync to Cloud';
+        }
+      });
+      
+      // Update status on load
+      updateSyncStatus();
     }
 
     // Service Worker Registration
