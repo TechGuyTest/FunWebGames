@@ -130,13 +130,28 @@
   cursor: grab;
   touch-action: none;
   z-index: 100;
-  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, outline 0.2s ease;
   user-select: none;
   -webkit-user-select: none;
 }
 
 .puzzle-piece:active {
   cursor: grabbing;
+}
+
+/* Keyboard focus and selection styles for accessibility */
+.puzzle-piece:focus {
+  outline: 3px solid var(--color-orange);
+  outline-offset: 2px;
+  z-index: 101;
+}
+
+.puzzle-piece.keyboard-selected {
+  outline: 3px solid var(--color-red);
+  outline-offset: 2px;
+  z-index: 102;
+  box-shadow: 0 0 15px var(--color-red), var(--shadow-lg);
+  transform: scale(1.15);
 }
 
 .puzzle-piece.dragging {

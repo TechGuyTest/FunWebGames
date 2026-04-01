@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Animal Puzzle - FunWebGames</title>
   <link rel="stylesheet" href="../../css/shared.css">
+  <link rel="stylesheet" href="../../css/accessibility.css">
   <link rel="stylesheet" href="style.css">
   <meta name="description" content="Drag-and-drop jigsaw puzzle with cute animal pictures">
 </head>
@@ -15,6 +16,9 @@
   <a href="../../index.html" class="btn btn-back">← Back to Games</a>
 
   <main class="game-container" role="main">
+    <!-- Screen Reader Announcer -->
+    <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    
     <header class="game-header">
       <h1>🧩 Animal Puzzle</h1>
       <button class="help-btn" id="help-btn" aria-label="Show help" title="Help">❓</button>
@@ -67,6 +71,7 @@
     </div>
   </main>
 
+  <script src="../../js/keyboard-nav.js"></script>
   <script src="../../js/highscore.js"></script>
   <script src="../../js/help-modal.js"></script>
   <script src="../../js/sound-toggle.js"></script>

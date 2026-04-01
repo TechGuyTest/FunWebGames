@@ -16,7 +16,11 @@ const state = {
   draggedPiece: null,
   dragOffset: { x: 0, y: 0 },
   time: 0,
-  timerInterval: null
+  timerInterval: null,
+  // Keyboard navigation state
+  keyboardMode: false,
+  selectedPiece: null,
+  keyboardPosition: { x: 0, y: 0 }
 };
 
 // Animal Data with SVG paths
@@ -547,5 +551,245 @@ function createConfetti() {
   }
 }
 
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', initGame);
+// ===== Keyboard Navigation Support =====
+
+function initKeyboardNavigation() {
+  // Add keyboard event listener for game-specific controls
+  document.addEventListener('keydown', handleGameKeyDown);
+  
+  // Make difficulty buttons keyboard accessible
+  difficultyBtns.forEach(btn => {
+    btn.setAttribute('tabindex', '0');
+    btn.setAttribute('role', 'radio');
+    btn.setAttribute('aria-checked', 'false');
+  });
+  
+  // Make restart button keyboard accessible
+  restartBtn.setAttribute('tabindex', '0');
+  restartBtn.setAttribute('role', 'button');
+  
+  // Make help button keyboard accessible
+  const helpBtn = document.getElementById('help-btn');
+  if (helpBtn) {
+    helpBtn.setAttribute('tabindex', '0');
+    helpBtn.setAttribute('role', 'button');
+  }
+  
+  // Make play again button keyboard accessible
+  playAgainBtn.setAttribute('tabindex', '0');
+  playAgainBtn.setAttribute('role', 'button');
+}
+
+function handleGameKeyDown(e) {
+  // Only handle keyboard navigation when not in an input field
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    return;
+  }
+  
+  // Check if we're in keyboard mode (user has started navigating with keyboard)
+  if (e.key === 'Tab') {
+    state.keyboardMode = true;
+    return;
+  }
+  
+  // Handle arrow keys for piece movement when a piece is selected
+  if (state.keyboardMode && state.selectedPiece) {
+    const moveStep = 20; // pixels to move per key press
+    
+    switch (e.key) {
+      case 'ArrowLeft':
+        e.preventDefault();
+        moveSelectedPiece(-moveStep, 0);
+        break;
+      case 'ArrowRight':
+        e.preventDefault();
+        moveSelectedPiece(moveStep, 0);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        moveSelectedPiece(0, -moveStep);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        moveSelectedPiece(0, moveStep);
+        break;
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        tryPlaceSelectedPiece();
+        break;
+      case 'Escape':
+        e.preventDefault();
+        deselectPiece();
+        break;
+    }
+    return;
+  }
+  
+  // Handle difficulty selection with arrow keys
+  if (e.target.classList.contains('difficulty-btn')) {
+    const buttons = Array.from(difficultyBtns);
+    const currentIndex = buttons.indexOf(e.target);
+    
+    switch (e.key) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        e.preventDefault();
+        const nextIdx = (currentIndex + 1) % buttons.length;
+        buttons[nextIdx].focus();
+        buttons[nextIdx].click();
+        break;
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        e.preventDefault();
+        const prevIdx = (currentIndex - 1 + buttons.length) % buttons.length;
+        buttons[prevIdx].focus();
+        buttons[prevIdx].click();
+        break;
+    }
+  }
+}
+
+function moveSelectedPiece(dx, dy) {
+  if (!state.selectedPiece) return;
+  
+  const piece = state.selectedPiece;
+  const currentLeft = parseFloat(piece.style.left) || 0;
+  const currentTop = parseFloat(piece.style.top) || 0;
+  
+  const newLeft = currentLeft + dx;
+  const newTop = currentTop + dy;
+  
+  // Boundary checks
+  const poolRect = piecePool.getBoundingClientRect();
+  const maxLeft = poolRect.width - piece.offsetWidth;
+  const maxTop = poolRect.height - piece.offsetHeight;
+  
+  piece.style.left = `${Math.max(0, Math.min(newLeft, maxLeft))}px`;
+  piece.style.top = `${Math.max(0, Math.min(newTop, maxTop))}px`;
+  
+  // Announce position to screen readers
+  if (KeyboardNav && KeyboardNav.announce) {
+    const row = Math.round((currentTop + dy) / 50);
+    const col = Math.round((currentLeft + dx) / 50);
+    KeyboardNav.announce(`Piece moved to row ${row}, column ${col}`);
+  }
+}
+
+function tryPlaceSelectedPiece() {
+  if (!state.selectedPiece) return;
+  
+  const piece = state.selectedPiece;
+  if (piece.classList.contains('placed')) return;
+  
+  const boardRect = puzzleBoard.getBoundingClientRect();
+  const pieceRect = piece.getBoundingClientRect();
+  const pieceCenter = {
+    x: pieceRect.left + pieceRect.width / 2,
+    y: pieceRect.top + pieceRect.height / 2
+  };
+  
+  const index = parseInt(piece.dataset.index);
+  const level = state.difficultyLevels[state.difficulty];
+  const { rows, cols } = level;
+  const pieceWidth = boardRect.width / cols;
+  const pieceHeight = boardRect.height / rows;
+  
+  const targetRow = parseInt(piece.dataset.row);
+  const targetCol = parseInt(piece.dataset.col);
+  
+  const targetX = boardRect.left + targetCol * pieceWidth + pieceWidth / 2;
+  const targetY = boardRect.top + targetRow * pieceHeight + pieceHeight / 2;
+  
+  const distance = Math.sqrt(
+    Math.pow(pieceCenter.x - targetX, 2) +
+    Math.pow(pieceCenter.y - targetY, 2)
+  );
+  
+  // Snap tolerance: ~50px
+  if (distance < 50) {
+    playSound('lift');
+    snapPieceToPosition(piece, targetRow, targetCol);
+    if (KeyboardNav && KeyboardNav.announce) {
+      KeyboardNav.announce('Piece placed!');
+    }
+  } else {
+    if (KeyboardNav && KeyboardNav.announce) {
+      KeyboardNav.announce('Move piece closer to the target position');
+    }
+  }
+  
+  deselectPiece();
+}
+
+function selectPiece(piece) {
+  // Deselect previous piece
+  if (state.selectedPiece) {
+    state.selectedPiece.classList.remove('keyboard-selected');
+    state.selectedPiece.setAttribute('aria-selected', 'false');
+  }
+  
+  state.selectedPiece = piece;
+  piece.classList.add('keyboard-selected');
+  piece.setAttribute('aria-selected', 'true');
+  piece.focus();
+  
+  state.keyboardMode = true;
+  
+  if (KeyboardNav && KeyboardNav.announce) {
+    const animal = state.currentAnimal ? state.currentAnimal.name : 'animal';
+    KeyboardNav.announce(`Selected ${animal} puzzle piece ${parseInt(piece.dataset.index) + 1} of ${state.totalPieces}. Use arrow keys to move, Enter to place.`);
+  }
+}
+
+function deselectPiece() {
+  if (state.selectedPiece) {
+    state.selectedPiece.classList.remove('keyboard-selected');
+    state.selectedPiece.setAttribute('aria-selected', 'false');
+    state.selectedPiece = null;
+  }
+  state.keyboardMode = false;
+}
+
+function setupPieceKeyboardNavigation() {
+  // Add keyboard navigation to puzzle pieces
+  state.pieces.forEach(piece => {
+    piece.setAttribute('tabindex', '0');
+    piece.setAttribute('role', 'button');
+    piece.setAttribute('aria-label', `Puzzle piece ${parseInt(piece.dataset.index) + 1} of ${state.totalPieces}`);
+    piece.setAttribute('aria-selected', 'false');
+    
+    piece.addEventListener('focus', () => {
+      if (!piece.classList.contains('placed')) {
+        selectPiece(piece);
+      }
+    });
+    
+    piece.addEventListener('blur', () => {
+      if (state.selectedPiece === piece && !state.keyboardMode) {
+        deselectPiece();
+      }
+    });
+    
+    piece.addEventListener('click', () => {
+      if (!piece.classList.contains('placed')) {
+        selectPiece(piece);
+      }
+    });
+  });
+}
+
+// Update setup functions to include keyboard navigation
+const originalInitGame = initGame;
+initGame = function() {
+  originalInitGame();
+  initKeyboardNavigation();
+};
+
+// Override startGame to setup piece keyboard navigation
+const originalStartGame = startGame;
+startGame = function() {
+  originalStartGame();
+  // Wait for pieces to be generated
+  setTimeout(setupPieceKeyboardNavigation, 100);
+};
