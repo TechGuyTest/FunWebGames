@@ -1,12 +1,17 @@
 /**
  * High Score System for FunWebGames
  * Uses localStorage to persist high scores across sessions
+ * Supports optional cloud sync via APISync module
  * 
  * Usage:
  *   HighScore.set('color-match', 'moves', 25);  // Lower is better
  *   HighScore.set('bubble-pop', 'score', 150);  // Higher is better
  *   const best = HighScore.get('color-match', 'moves');
  *   HighScore.reset();  // Clear all scores
+ * 
+ * Cloud Sync:
+ *   APISync.init('https://api.example.com', 'user-token');
+ *   HighScore.set('color-match', 'moves', 25, true);  // Sync to cloud
  */
 
 const HighScore = (function() {
@@ -44,7 +49,8 @@ const HighScore = (function() {
   
   // Set high score for a game and metric
   // metricType: 'low' means lower is better (moves), 'high' means higher is better (score)
-  function set(game, metric, value, metricType = 'low') {
+  // syncToCloud: if true, also sync to external API (requires APISync to be initialized)
+  function set(game, metric, value, metricType = 'low', syncToCloud = false) {
     const scores = loadScores();
     
     if (!scores[game]) {
@@ -57,6 +63,12 @@ const HighScore = (function() {
     if (currentBest === null || currentBest === undefined) {
       scores[game][metric] = value;
       saveScores(scores);
+      
+      // Sync to cloud if requested
+      if (syncToCloud && typeof APISync !== 'undefined') {
+        APISync.syncScore(game, metric, value, metricType);
+      }
+      
       return true; // New record
     }
     
@@ -65,6 +77,12 @@ const HighScore = (function() {
       if (value < currentBest) {
         scores[game][metric] = value;
         saveScores(scores);
+        
+        // Sync to cloud if requested
+        if (syncToCloud && typeof APISync !== 'undefined') {
+          APISync.syncScore(game, metric, value, metricType);
+        }
+        
         return true; // New record
       }
     } else {
@@ -72,6 +90,12 @@ const HighScore = (function() {
       if (value > currentBest) {
         scores[game][metric] = value;
         saveScores(scores);
+        
+        // Sync to cloud if requested
+        if (syncToCloud && typeof APISync !== 'undefined') {
+          APISync.syncScore(game, metric, value, metricType);
+        }
+        
         return true; // New record
       }
     }
@@ -112,6 +136,35 @@ const HighScore = (function() {
     return '';
   }
   
+  // Fetch leaderboard from cloud (requires APISync)
+  async function getLeaderboard(game, metric = null, limit = 10) {
+    if (typeof APISync === 'undefined') {
+      console.warn('HighScore: APISync not available');
+      return [];
+    }
+    return await APISync.fetchLeaderboard(game, metric, limit);
+  }
+  
+  // Sync local scores to cloud
+  function syncAllToCloud() {
+    if (typeof APISync === 'undefined') {
+      console.warn('HighScore: APISync not available');
+      return;
+    }
+    
+    const scores = loadScores();
+    for (const game in scores) {
+      for (const metric in scores[game]) {
+        APISync.syncScore(game, metric, scores[game][metric], 'low');
+      }
+    }
+  }
+  
+  // Check if cloud sync is available
+  function isCloudSyncAvailable() {
+    return typeof APISync !== 'undefined' && APISync.isEnabled();
+  }
+  
   // Public API
   return {
     get,
@@ -120,7 +173,10 @@ const HighScore = (function() {
     reset,
     resetGame,
     getAll,
-    display
+    display,
+    getLeaderboard,
+    syncAllToCloud,
+    isCloudSyncAvailable
   };
 })();
 
