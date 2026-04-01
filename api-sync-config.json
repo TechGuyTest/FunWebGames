@@ -1,0 +1,27 @@
+{
+  "sources": [
+    {
+      "name": "游戏分数",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "output": "data/scores.json",
+      "enabled": true
+    },
+    {
+      "name": "用户数据",
+      "url": "https://jsonplaceholder.typicode.com/users",
+      "output": "data/users.json",
+      "enabled": true
+    },
+    {
+      "name": "评论数据",
+      "url": "https://jsonplaceholder.typicode.com/comments",
+      "output": "data/comments.json",
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "timeout": 30000,
+    "retries": 3,
+    "parallel": true
+  }
+}

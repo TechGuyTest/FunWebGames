@@ -1,0 +1,28 @@
+{
+  "sources": [
+    {
+      "name": "crypto",
+      "url": "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=10",
+      "output": "crypto-prices.json",
+      "enabled": true
+    },
+    {
+      "name": "github",
+      "url": "https://api.github.com/repos/TechGuyTest/FunWebGames",
+      "output": "github-repo.json",
+      "enabled": true
+    },
+    {
+      "name": "posts",
+      "url": "https://jsonplaceholder.typicode.com/posts",
+      "output": "posts.json",
+      "enabled": true
+    },
+    {
+      "name": "users",
+      "url": "https://jsonplaceholder.typicode.com/users",
+      "output": "users.json",
+      "enabled": true
+    }
+  ]
+}
